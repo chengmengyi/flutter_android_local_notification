@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
             children: [
               TextButton(onPressed: (){
                 FlutterAndroidLocalNotification.instance.initWorkManager(
-                    list: [LocalNotificationConfig(type: "type", title: "哈哈哈", body: "吞吞吐吐", intervalMinute: 15,)],
+                    list: [LocalNotificationConfig(type: "type", title: "哈哈哈", body: "吞吞吐吐", intervalMinute: 1,)],
                     callback: LocalNotificationCallback(
                       clickNotificationCallback: (type){
                         setState(() {

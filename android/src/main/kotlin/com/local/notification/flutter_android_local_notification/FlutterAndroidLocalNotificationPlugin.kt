@@ -73,7 +73,7 @@ class FlutterAndroidLocalNotificationPlugin: FlutterPlugin, MethodCallHandler {
           val intervalMinute = (map["intervalMinute"] as? Int)?:0
           val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
-            .setRequiresBatteryNotLow(true).build()
+            .build()
           if(intervalMinute<15){
             val workRequest= OneTimeWorkRequest
               .Builder(LocalNotificationWorkManager::class.java)
