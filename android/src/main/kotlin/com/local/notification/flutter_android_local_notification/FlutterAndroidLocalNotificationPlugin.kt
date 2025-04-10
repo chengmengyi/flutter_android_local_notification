@@ -5,6 +5,7 @@ import android.app.Application
 import android.app.Application.ActivityLifecycleCallbacks
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.core.content.ContextCompat
@@ -56,13 +57,17 @@ class FlutterAndroidLocalNotificationPlugin: FlutterPlugin, MethodCallHandler {
         val title = (map["title"] as? String) ?: ""
         val body = (map["body"] as? String) ?: ""
         val logoFolder = (map["logoFolder"] as? String) ?: ""
-        val intent = Intent(mApplicationContext, NotificationService::class.java)
-        intent.putExtra("logoName",logoName)
-        intent.putExtra("type",type)
-        intent.putExtra("title",title)
-        intent.putExtra("body",body)
-        intent.putExtra("logoFolder",logoFolder)
-        ContextCompat.startForegroundService(mApplicationContext,intent)
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE){
+          val intent = Intent(mApplicationContext, NotificationService::class.java)
+          intent.putExtra("logoName",logoName)
+          intent.putExtra("type",type)
+          intent.putExtra("title",title)
+          intent.putExtra("body",body)
+          intent.putExtra("logoFolder",logoFolder)
+          ContextCompat.startForegroundService(mApplicationContext,intent)
+        }else{
+          NotificationHep.createNotification(type, title, body, logoName, logoFolder)
+        }
       }
     }
   }
