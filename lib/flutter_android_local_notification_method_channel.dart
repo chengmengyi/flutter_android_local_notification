@@ -39,4 +39,8 @@ class MethodChannelFlutterAndroidLocalNotification extends FlutterAndroidLocalNo
   Future<void> showNotification(LocalNotificationConfig config) async{
     await methodChannel.invokeMethod<String>("showNotification",config.toJson());
   }
+  @override
+  Future<void> startNotificationService(LocalNotificationConfig config) async{
+    await methodChannel.invokeMethod<String>("startNotificationService",config.toJson());
+  }
 }

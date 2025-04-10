@@ -4,7 +4,7 @@ class LocalNotificationConfig{
   String body;
   //间隔分钟数,大于15分钟，
   //小于15分钟使用OneTimeWorkRequest，且固定5秒后执行
-  //仅显示一次通知，随便传
+  //除了定时通知外，其他的通知随便传
   int intervalMinute;
   String logoName;  //logo名字，不带后缀，固定为.png
   String logoFolder; //logo文件夹

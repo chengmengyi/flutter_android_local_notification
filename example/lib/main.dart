@@ -38,20 +38,29 @@ class _MyAppState extends State<MyApp> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextButton(onPressed: (){
-                FlutterAndroidLocalNotification.instance.initWorkManager(
-                    list: [LocalNotificationConfig(type: "type", title: "哈哈哈", body: "吞吞吐吐", intervalMinute: 1,)],
-                    callback: LocalNotificationCallback(
+                FlutterAndroidLocalNotification.instance.initAllNotification(
+                  fcmTopic: "",
+                  serviceNotification: LocalNotificationConfig(type: "type", title: "常驻", body: "常驻", intervalMinute: 1,),
+                  lockScreenNotification: LocalNotificationConfig(type: "type", title: "锁屏", body: "锁屏", intervalMinute: 1,),
+                  workList: [LocalNotificationConfig(type: "type", title: "哈哈哈", body: "吞吞吐吐", intervalMinute: 1,)],
+                  callback: LocalNotificationCallback(
                       clickNotificationCallback: (type){
                         setState(() {
                           this.type=type;
                         });
                       },
-                    )
+                      lockScreenNotificationShow: (){
+
+                      }
+                  ),
                 );
-              }, child: Text("点击===${type}"),),
+              }, child: Text("初始化所有通知"),),
               TextButton(onPressed: (){
                 FlutterAndroidLocalNotification.instance.showNotification(config: LocalNotificationConfig(type: "type", title: "单次显示", body: "吞吞吐吐", intervalMinute: 15,));
-              }, child: Text("单次显示"),)
+              }, child: Text("单次显示"),),
+              TextButton(onPressed: (){
+                FlutterAndroidLocalNotification.instance.startNotificationService(config: LocalNotificationConfig(type: "type", title: "常驻通知", body: "吞吞吐吐", intervalMinute: 15,));
+              }, child: Text("常驻通知"),)
             ],
           ),
         ),
@@ -60,9 +69,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   _getLaunchNotificationType()async{
-    type=await FlutterAndroidLocalNotification.instance.getLaunchNotificationType();
-    setState(() {
-
-    });
+    // type=await FlutterAndroidLocalNotification.instance.getLaunchNotificationType();
+    // setState(() {
+    //
+    // });
   }
 }

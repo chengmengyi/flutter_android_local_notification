@@ -4,8 +4,10 @@ import android.app.Activity
 import android.app.Application
 import android.app.Application.ActivityLifecycleCallbacks
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.work.*
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
@@ -41,6 +43,27 @@ class FlutterAndroidLocalNotificationPlugin: FlutterPlugin, MethodCallHandler {
         NotificationHep.notificationType=""
       }
       "showNotification"->showNotification(call)
+      "startNotificationService"->startNotificationService(call)
+    }
+  }
+
+  private fun startNotificationService(call: MethodCall){
+    call.arguments?.let{
+      runCatching {
+        val map = it as Map<String, Any>
+        val logoName = (map["logoName"] as? String) ?: ""
+        val type = (map["type"] as? String) ?: ""
+        val title = (map["title"] as? String) ?: ""
+        val body = (map["body"] as? String) ?: ""
+        val logoFolder = (map["logoFolder"] as? String) ?: ""
+        val intent = Intent(mApplicationContext, NotificationService::class.java)
+        intent.putExtra("logoName",logoName)
+        intent.putExtra("type",type)
+        intent.putExtra("title",title)
+        intent.putExtra("body",body)
+        intent.putExtra("logoFolder",logoFolder)
+        ContextCompat.startForegroundService(mApplicationContext,intent)
+      }
     }
   }
 

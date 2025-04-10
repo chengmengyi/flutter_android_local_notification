@@ -73,7 +73,7 @@ object NotificationHep {
         }
     }
 
-    private fun getLogoIconId(logoName:String,logoFolder:String) = mApplicationContext.resources.getIdentifier(
+    fun getLogoIconId(logoName:String,logoFolder:String) = mApplicationContext.resources.getIdentifier(
         logoName,
         logoFolder,
         mApplicationContext.packageName
