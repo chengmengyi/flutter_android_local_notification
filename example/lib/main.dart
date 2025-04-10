@@ -34,18 +34,26 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: TextButton(onPressed: (){
-            FlutterAndroidLocalNotification.instance.initWorkManager(
-              list: [LocalNotificationConfig(type: "type", title: "哈哈哈", body: "吞吞吐吐", intervalMinute: 15,)],
-              callback: LocalNotificationCallback(
-                clickNotificationCallback: (type){
-                  setState(() {
-                    this.type=type;
-                  });
-                },
-              )
-            );
-          }, child: Text("点击===${type}"),),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextButton(onPressed: (){
+                FlutterAndroidLocalNotification.instance.initWorkManager(
+                    list: [LocalNotificationConfig(type: "type", title: "哈哈哈", body: "吞吞吐吐", intervalMinute: 15,)],
+                    callback: LocalNotificationCallback(
+                      clickNotificationCallback: (type){
+                        setState(() {
+                          this.type=type;
+                        });
+                      },
+                    )
+                );
+              }, child: Text("点击===${type}"),),
+              TextButton(onPressed: (){
+                FlutterAndroidLocalNotification.instance.showNotification(config: LocalNotificationConfig(type: "type", title: "单次显示", body: "吞吞吐吐", intervalMinute: 15,));
+              }, child: Text("单次显示"),)
+            ],
+          ),
         ),
       ),
     );

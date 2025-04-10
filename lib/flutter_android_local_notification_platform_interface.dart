@@ -32,4 +32,7 @@ abstract class FlutterAndroidLocalNotificationPlatform extends PlatformInterface
   Future<String?> getLaunchNotificationType(){
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
+  Future<void> showNotification(LocalNotificationConfig config){
+    throw UnimplementedError('platformVersion() has not been implemented.');
+  }
 }

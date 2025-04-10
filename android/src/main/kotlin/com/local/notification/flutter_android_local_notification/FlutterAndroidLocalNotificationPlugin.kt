@@ -40,6 +40,21 @@ class FlutterAndroidLocalNotificationPlugin: FlutterPlugin, MethodCallHandler {
         result.success(NotificationHep.notificationType)
         NotificationHep.notificationType=""
       }
+      "showNotification"->showNotification(call)
+    }
+  }
+
+  private fun showNotification(call: MethodCall){
+    call.arguments?.let{
+      runCatching {
+        val map = it as Map<String, Any>
+        val logoName = (map["logoName"] as? String) ?: ""
+        val type = (map["type"] as? String) ?: ""
+        val title = (map["title"] as? String) ?: ""
+        val body = (map["body"] as? String) ?: ""
+        val logoFolder = (map["logoFolder"] as? String) ?: ""
+        NotificationHep.createNotification(type, title, body, logoName, logoFolder)
+      }
     }
   }
 
@@ -73,7 +88,7 @@ class FlutterAndroidLocalNotificationPlugin: FlutterPlugin, MethodCallHandler {
               .setConstraints(constraints)
               .setInputData(builder)
               .build()
-            WorkManager.getInstance(mApplicationContext).enqueue(periodicWorkRequest)
+            WorkManager.getInstance(mApplicationContext).enqueueUniquePeriodicWork("startWork",ExistingPeriodicWorkPolicy.KEEP,periodicWorkRequest)
           }
         }
       }

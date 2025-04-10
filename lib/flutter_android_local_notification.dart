@@ -19,4 +19,8 @@ class FlutterAndroidLocalNotification {
     var result = await FlutterAndroidLocalNotificationPlatform.instance.getLaunchNotificationType();
     return result??"";
   }
+
+  showNotification({required LocalNotificationConfig config,}){
+    FlutterAndroidLocalNotificationPlatform.instance.showNotification(config);
+  }
 }
