@@ -12,8 +12,9 @@ import java.util.*
 
 object NotificationHep {
     fun createNotification(type:String,title:String,body:String,logoName:String,logoFolder:String){
+        val id = Random().nextInt(999)
         val channelId = createNotificationChannel(
-            "my_channel",
+            "my_channel$id",
             "my_channel",
             NotificationManager.IMPORTANCE_MAX
         )
@@ -22,8 +23,6 @@ object NotificationHep {
             putExtra("type",type)
             putExtra("action","click_notification")
         }
-
-        val id = Random().nextInt(999)
         val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.getActivity(mApplicationContext, id, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }else{

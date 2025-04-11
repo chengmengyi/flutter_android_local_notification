@@ -129,6 +129,7 @@ class FlutterAndroidLocalNotificationPlugin: FlutterPlugin, MethodCallHandler,Pl
                   .setConstraints(constraints)
                   .setInputData(builder)
                   .setInitialDelay(currentTime.toLong(),TimeUnit.MINUTES)
+//                  .setInitialDelay(5,TimeUnit.SECONDS)
                   .build()
                 WorkManager.getInstance(mApplicationContext).enqueueUniquePeriodicWork("startWork_$i",ExistingPeriodicWorkPolicy.KEEP,periodicWorkRequest)
               }
