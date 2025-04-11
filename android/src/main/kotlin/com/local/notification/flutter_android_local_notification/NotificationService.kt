@@ -44,9 +44,9 @@ class NotificationService:Service() {
         val logoName = intent?.getStringExtra("logoName")?:""
         val logoFolder = intent?.getStringExtra("logoFolder")?:""
 
-        val intent=Intent(mApplicationContext,NotificationActivity::class.java).apply {
-            action="click_notification"
+        val intent=NotificationHep.getLaunchIntent()?.apply {
             putExtra("type",type)
+            putExtra("action","click_notification")
         }
         val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.getActivity(mApplicationContext, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)

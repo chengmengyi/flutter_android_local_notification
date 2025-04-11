@@ -29,6 +29,10 @@ class FlutterAndroidLocalNotification {
         FirebaseMessaging.instance.subscribeToTopic(fcmTopic);
       }
     }
+    var type = await getLaunchNotificationType();
+    if(type.isNotEmpty){
+      callback.clickNotificationCallback.call(type);
+    }
   }
 
   _registerBroadcast(LocalNotificationConfig? lockScreenNotification, LocalNotificationCallback callback){
@@ -50,6 +54,7 @@ class FlutterAndroidLocalNotification {
     FlutterAndroidLocalNotificationPlatform.instance.initWorkManager(list,callback);
   }
 
+  //initAllNotification方法会自动调用此方法
   Future<String> getLaunchNotificationType()async{
     var result = await FlutterAndroidLocalNotificationPlatform.instance.getLaunchNotificationType();
     return result??"";

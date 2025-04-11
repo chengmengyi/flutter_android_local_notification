@@ -1,37 +1,34 @@
 package com.local.notification.flutter_android_local_notification
 
 import android.app.Activity
-import android.app.Application
-import android.app.Application.ActivityLifecycleCallbacks
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.Bundle
-import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.work.*
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
+import io.flutter.plugin.common.PluginRegistry
 import java.util.concurrent.TimeUnit
 
 lateinit var mApplicationContext: Context
-var pages=0
 
-class FlutterAndroidLocalNotificationPlugin: FlutterPlugin, MethodCallHandler {
+class FlutterAndroidLocalNotificationPlugin: FlutterPlugin, MethodCallHandler,PluginRegistry.NewIntentListener, ActivityAware{
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
   /// when the Flutter Engine is detached from the Activity
   private lateinit var channel : MethodChannel
+  private var mActivity:Activity?=null
 
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     mApplicationContext=flutterPluginBinding.applicationContext
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_android_local_notification")
-    NotificationHep.initChannel(channel)
     channel.setMethodCallHandler(this)
-    registerActivityLifecycleCallbacks(flutterPluginBinding)
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
@@ -40,8 +37,13 @@ class FlutterAndroidLocalNotificationPlugin: FlutterPlugin, MethodCallHandler {
         initWorkManager(call)
       }
       "getLaunchNotificationType"->{
-        result.success(NotificationHep.notificationType)
-        NotificationHep.notificationType=""
+        if(null!=mActivity){
+          val intent = mActivity?.intent
+          val action = intent?.extras?.getString("action")
+          if(action=="click_notification"){
+            result.success(intent.extras?.getString("type")?:"")
+          }
+        }
       }
       "showNotification"->showNotification(call)
       "startNotificationService"->startNotificationService(call)
@@ -127,23 +129,32 @@ class FlutterAndroidLocalNotificationPlugin: FlutterPlugin, MethodCallHandler {
     channel.setMethodCallHandler(null)
   }
 
-  private fun registerActivityLifecycleCallbacks(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding){
-    (flutterPluginBinding.getApplicationContext() as Application).registerActivityLifecycleCallbacks(
-      object : ActivityLifecycleCallbacks {
-        override fun onActivityCreated(activity: Activity, bundle: Bundle?) {}
-        override fun onActivityStarted(activity: Activity) {
-          pages++
-        }
+  override fun onNewIntent(p0: Intent): Boolean {
+    val action = p0.extras?.getString("action")
+    if(action=="click_notification"){
+      val map= hashMapOf<String,String>()
+      map["notificationType"]= p0.extras?.getString("type")?:""
+      channel.invokeMethod("clickNotificationCallBack",map)
+      return true
+    }
+    return true
+  }
 
-        override fun onActivityResumed(activity: Activity) {}
-        override fun onActivityPaused(activity: Activity) {}
-        override fun onActivityStopped(activity: Activity) {
-          pages--
-        }
+  override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+    binding.addOnNewIntentListener(this)
+    mActivity=binding.activity
+  }
 
-        override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle) {}
-        override fun onActivityDestroyed(act: Activity) {
-        }
-      })
+  override fun onDetachedFromActivityForConfigChanges() {
+
+  }
+
+  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+    binding.addOnNewIntentListener(this)
+    mActivity=binding.activity
+  }
+
+  override fun onDetachedFromActivity() {
+    mActivity=null
   }
 }

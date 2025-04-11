@@ -18,13 +18,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var type="";
-
-  @override
-  void initState() {
-    super.initState();
-    _getLaunchNotificationType();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +38,7 @@ class _MyAppState extends State<MyApp> {
                   workList: [LocalNotificationConfig(type: "type", title: "哈哈哈", body: "吞吞吐吐", intervalMinute: 1,)],
                   callback: LocalNotificationCallback(
                       clickNotificationCallback: (type){
-                        setState(() {
-                          this.type=type;
-                        });
+
                       },
                       lockScreenNotificationShow: (){
 
@@ -56,22 +47,15 @@ class _MyAppState extends State<MyApp> {
                 );
               }, child: Text("初始化所有通知"),),
               TextButton(onPressed: (){
-                FlutterAndroidLocalNotification.instance.showNotification(config: LocalNotificationConfig(type: "type", title: "单次显示", body: "吞吞吐吐", intervalMinute: 15,));
+                FlutterAndroidLocalNotification.instance.showNotification(config: LocalNotificationConfig(type: "单次显示", title: "单次显示", body: "吞吞吐吐", intervalMinute: 15,));
               }, child: Text("单次显示"),),
               TextButton(onPressed: (){
-                FlutterAndroidLocalNotification.instance.startNotificationService(config: LocalNotificationConfig(type: "type", title: "常驻通知", body: "吞吞吐吐", intervalMinute: 15,));
-              }, child: Text("常驻通知"),)
+                FlutterAndroidLocalNotification.instance.startNotificationService(config: LocalNotificationConfig(type: "常驻通知", title: "常驻通知", body: "吞吞吐吐", intervalMinute: 15,));
+              }, child: Text("常驻通知"),),
             ],
           ),
         ),
       ),
     );
-  }
-
-  _getLaunchNotificationType()async{
-    // type=await FlutterAndroidLocalNotification.instance.getLaunchNotificationType();
-    // setState(() {
-    //
-    // });
   }
 }

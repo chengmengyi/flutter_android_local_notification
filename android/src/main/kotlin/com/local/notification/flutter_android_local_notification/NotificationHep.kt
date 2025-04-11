@@ -11,25 +11,6 @@ import io.flutter.plugin.common.MethodChannel
 import java.util.*
 
 object NotificationHep {
-    var notificationType=""
-    private var channel: MethodChannel?=null
-
-    fun initChannel(channel: MethodChannel){
-        this.channel=channel
-    }
-
-    fun clickNotificationCallBack(intent: Intent?,fromLaunch:Boolean){
-        if(intent?.action=="click_notification"){
-            notificationType=intent.extras?.getString("type")?:""
-            val map= hashMapOf<String,String>()
-            map["notificationType"]=notificationType
-            if(!fromLaunch){
-                channel?.invokeMethod("clickNotificationCallBack",map)
-                notificationType=""
-            }
-        }
-    }
-
     fun createNotification(type:String,title:String,body:String,logoName:String,logoFolder:String){
         val channelId = createNotificationChannel(
             "my_channel",
@@ -37,9 +18,9 @@ object NotificationHep {
             NotificationManager.IMPORTANCE_MAX
         )
 
-        val intent = Intent(mApplicationContext,NotificationActivity::class.java).apply {
-            action="click_notification"
+        val intent = getLaunchIntent()?.apply {
             putExtra("type",type)
+            putExtra("action","click_notification")
         }
 
         val id = Random().nextInt(999)
@@ -78,4 +59,14 @@ object NotificationHep {
         logoFolder,
         mApplicationContext.packageName
     )
+
+    fun getLaunchIntent(): Intent? {
+        val packageName = mApplicationContext.packageName
+        val packageManager = mApplicationContext.packageManager
+        val intent = packageManager.getLaunchIntentForPackage(packageName)
+        intent?.action = Intent.ACTION_MAIN
+        intent?.addCategory(Intent.CATEGORY_LAUNCHER)
+        intent?.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        return intent
+    }
 }
