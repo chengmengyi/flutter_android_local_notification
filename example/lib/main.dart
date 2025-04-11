@@ -33,9 +33,9 @@ class _MyAppState extends State<MyApp> {
               TextButton(onPressed: (){
                 FlutterAndroidLocalNotification.instance.initAllNotification(
                   fcmTopic: "",
-                  serviceNotification: LocalNotificationConfig(type: "type", title: "常驻", body: "常驻", intervalMinute: 1,),
-                  lockScreenNotification: LocalNotificationConfig(type: "type", title: "锁屏", body: "锁屏", intervalMinute: 1,),
-                  workList: [LocalNotificationConfig(type: "type", title: "哈哈哈", body: "吞吞吐吐", intervalMinute: 1,)],
+                  serviceNotification: LocalNotificationConfig(type: "service", title: "常驻", body: "常驻", loopNum: 0, singleAddMinute: 0,),
+                  lockScreenNotification: LocalNotificationConfig(type: "lock", title: "锁屏", body: "锁屏", loopNum: 0, singleAddMinute: 0,),
+                  workList: [LocalNotificationConfig(type: "work", title: "哈哈哈", body: "吞吞吐吐", loopNum: 48, singleAddMinute: 1,)],
                   callback: LocalNotificationCallback(
                       clickNotificationCallback: (type){
 
@@ -47,10 +47,10 @@ class _MyAppState extends State<MyApp> {
                 );
               }, child: Text("初始化所有通知"),),
               TextButton(onPressed: (){
-                FlutterAndroidLocalNotification.instance.showNotification(config: LocalNotificationConfig(type: "单次显示", title: "单次显示", body: "吞吞吐吐", intervalMinute: 15,));
+                FlutterAndroidLocalNotification.instance.showNotification(config: LocalNotificationConfig(type: "单次显示", title: "单次显示", body: "吞吞吐吐", loopNum: 0, singleAddMinute: 0,));
               }, child: Text("单次显示"),),
               TextButton(onPressed: (){
-                FlutterAndroidLocalNotification.instance.startNotificationService(config: LocalNotificationConfig(type: "常驻通知", title: "常驻通知", body: "吞吞吐吐", intervalMinute: 15,));
+                FlutterAndroidLocalNotification.instance.startNotificationService(config: LocalNotificationConfig(type: "常驻通知", title: "常驻通知", body: "吞吞吐吐", loopNum: 0, singleAddMinute: 0,));
               }, child: Text("常驻通知"),),
             ],
           ),

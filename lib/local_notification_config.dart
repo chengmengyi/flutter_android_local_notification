@@ -2,10 +2,12 @@ class LocalNotificationConfig{
   String type; //区分通知类型，方便打点
   String title;
   String body;
-  //间隔分钟数,大于15分钟，
+  //循环次数，单个通知传0
+  int loopNum;
+  //单次增加分钟数，必须大于15
+  //单个通知传0
   //小于15分钟使用OneTimeWorkRequest，且固定5秒后执行
-  //除了定时通知外，其他的通知随便传
-  int intervalMinute;
+  int singleAddMinute;
   String logoName;  //logo名字，不带后缀，固定为.png
   String logoFolder; //logo文件夹
 
@@ -13,7 +15,8 @@ class LocalNotificationConfig{
     required this.type,
     required this.title,
     required this.body,
-    required this.intervalMinute,
+    required this.loopNum,
+    required this.singleAddMinute,
     this.logoName="ic_launcher",
     this.logoFolder="mipmap",
   });
@@ -23,7 +26,8 @@ class LocalNotificationConfig{
       'type': type,
       'title': title,
       'body': body,
-      'intervalMinute':intervalMinute,
+      'loopNum':loopNum,
+      'singleAddMinute':singleAddMinute,
       'logoName':logoName,
       'logoFolder':logoFolder,
     };
