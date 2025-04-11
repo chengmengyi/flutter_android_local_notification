@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.work.*
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -94,47 +95,48 @@ class FlutterAndroidLocalNotificationPlugin: FlutterPlugin, MethodCallHandler,Pl
         val list = it as List<Map<String, Any>>
         for (map in list) {
           val loopNum = (map["loopNum"] as? Int)?:0
+          val logoName = (map["logoName"] as? String) ?: ""
+          val type = (map["type"] as? String) ?: ""
+          val title = (map["title"] as? String) ?: ""
+          val body = (map["body"] as? String) ?: ""
+          val logoFolder = (map["logoFolder"] as? String) ?: ""
           if(loopNum>0){
             val singleAddMinute = (map["singleAddMinute"] as? Int)?:0
             var currentTime=0
             for (i in 1..loopNum) {
               currentTime += singleAddMinute
-              createWork(map,currentTime.toLong())
+              val builder = Data.Builder()
+                .putString("logoName",(map["logoName"] as? String)?:"")
+                .putString("type",(map["type"] as? String)?:"")
+                .putString("title",(map["title"] as? String)?:"")
+                .putString("body",(map["body"] as? String)?:"")
+                .putString("logoFolder",(map["logoFolder"] as? String)?:"")
+                .build()
+              val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
+                .build()
+              if(currentTime<15){
+                val workRequest= OneTimeWorkRequest
+                  .Builder(LocalNotificationWorkManager::class.java)
+                  .setConstraints(constraints)
+                  .setInitialDelay(5, TimeUnit.SECONDS)
+                  .setInputData(builder)
+                  .build()
+                WorkManager.getInstance(mApplicationContext).enqueue(workRequest)
+              }else{
+                val periodicWorkRequest = PeriodicWorkRequest
+                  .Builder(LocalNotificationWorkManager::class.java, currentTime.toLong(), TimeUnit.MINUTES)
+                  .setConstraints(constraints)
+                  .setInputData(builder)
+                  .setInitialDelay(currentTime.toLong(),TimeUnit.MINUTES)
+                  .build()
+                WorkManager.getInstance(mApplicationContext).enqueueUniquePeriodicWork("startWork_$i",ExistingPeriodicWorkPolicy.KEEP,periodicWorkRequest)
+              }
             }
-          }else{
-            createWork(map,0)
           }
+          NotificationHep.createNotification(type, title, body, logoName, logoFolder)
         }
       }
-    }
-  }
-
-  private fun createWork(map: Map<String, Any>,intervalMinute:Long){
-    val builder = Data.Builder()
-      .putString("logoName",(map["logoName"] as? String)?:"")
-      .putString("type",(map["type"] as? String)?:"")
-      .putString("title",(map["title"] as? String)?:"")
-      .putString("body",(map["body"] as? String)?:"")
-      .putString("logoFolder",(map["logoFolder"] as? String)?:"")
-      .build()
-    val constraints = Constraints.Builder()
-      .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
-      .build()
-    if(intervalMinute<15){
-      val workRequest= OneTimeWorkRequest
-        .Builder(LocalNotificationWorkManager::class.java)
-        .setConstraints(constraints)
-        .setInitialDelay(5, TimeUnit.SECONDS)
-        .setInputData(builder)
-        .build()
-      WorkManager.getInstance(mApplicationContext).enqueue(workRequest)
-    }else{
-      val periodicWorkRequest = PeriodicWorkRequest
-        .Builder(LocalNotificationWorkManager::class.java, intervalMinute, TimeUnit.MINUTES)
-        .setConstraints(constraints)
-        .setInputData(builder)
-        .build()
-      WorkManager.getInstance(mApplicationContext).enqueueUniquePeriodicWork("startWork",ExistingPeriodicWorkPolicy.KEEP,periodicWorkRequest)
     }
   }
 

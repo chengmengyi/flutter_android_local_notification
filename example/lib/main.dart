@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
                   fcmTopic: "",
                   serviceNotification: LocalNotificationConfig(type: "service", title: "常驻", body: "常驻", loopNum: 0, singleAddMinute: 0,),
                   lockScreenNotification: LocalNotificationConfig(type: "lock", title: "锁屏", body: "锁屏", loopNum: 0, singleAddMinute: 0,),
-                  workList: [LocalNotificationConfig(type: "work", title: "哈哈哈", body: "吞吞吐吐", loopNum: 48, singleAddMinute: 1,)],
+                  workList: [LocalNotificationConfig(type: "work", title: "哈哈哈", body: "吞吞吐吐", loopNum: 48, singleAddMinute: 60,)],
                   callback: LocalNotificationCallback(
                       clickNotificationCallback: (type){
 
@@ -52,6 +52,19 @@ class _MyAppState extends State<MyApp> {
               TextButton(onPressed: (){
                 FlutterAndroidLocalNotification.instance.startNotificationService(config: LocalNotificationConfig(type: "常驻通知", title: "常驻通知", body: "吞吞吐吐", loopNum: 0, singleAddMinute: 0,));
               }, child: Text("常驻通知"),),
+              TextButton(onPressed: (){
+                FlutterAndroidLocalNotification.instance.initWorkManager(
+                  list: [LocalNotificationConfig(type: "work", title: "哈哈哈", body: "吞吞吐吐", loopNum: 48, singleAddMinute: 60,)],
+                  callback: LocalNotificationCallback(
+                      clickNotificationCallback: (type){
+
+                      },
+                      lockScreenNotificationShow: (){
+
+                      }
+                  ),
+                );
+              }, child: Text("开启任务"),),
             ],
           ),
         ),
