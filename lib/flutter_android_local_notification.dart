@@ -1,7 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_android_local_notification/local_notification_callback.dart';
 import 'package:flutter_android_local_notification/local_notification_config.dart';
-import 'package:flutter_broadcasts/flutter_broadcasts.dart';
+import 'package:flutter_broadcasts_plus/flutter_broadcasts.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'flutter_android_local_notification_platform_interface.dart';
