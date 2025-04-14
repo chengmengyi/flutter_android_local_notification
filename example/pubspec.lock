@@ -140,15 +140,15 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.8"
+    version: "0.0.9"
   flutter_broadcasts_plus:
     dependency: transitive
     description:
       name: flutter_broadcasts_plus
-      sha256: "57f16d333c6b2f9ed84758cc4cc49565a35cc54d254d8c512b1d046f5aebe113"
+      sha256: b24d1da99f22ee1b8bb4a6f11edaaf4f936c918eefb590aa024e505c4d3cd900
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.2"
+    version: "0.0.3"
   flutter_driver:
     dependency: transitive
     description: flutter

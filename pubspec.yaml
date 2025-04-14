@@ -1,6 +1,6 @@
 name: flutter_android_local_notification
 description: "android_local_notification"
-version: 0.0.8
+version: 0.0.9
 homepage: https://github.com/chengmengyi/flutter_android_local_notification
 
 environment:
@@ -14,7 +14,7 @@ dependencies:
   permission_handler: 11.3.1
   firebase_messaging: 15.0.4
   android_intent_plus: 5.3.0
-  flutter_broadcasts_plus: 0.0.2
+  flutter_broadcasts_plus: 0.0.3
 
 dev_dependencies:
   flutter_test:
